@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Console .NET CLR Launch",
+            "linux": {
+                "type": "mono",
+                "preLaunchTask": "build Mono"
+            },           
+            "type": "clr",
+            "request": "launch",
+            "preLaunchTask": "build CLR",
+            "program": "${workspaceRoot}/build/Plt.MVUBlog.Program.Console.exe",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+    ]
+}

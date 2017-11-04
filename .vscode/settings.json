@@ -1,0 +1,10 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "files.exclude": {
+        ".fake": true,
+        ".paket": true,
+        ".tools": true,
+        "deploy": true,
+        "/**/**/obj": true
+    }
+}
