@@ -8,19 +8,22 @@ open Plt.MVUBlog.Program.Console.Utils
 let readConsole dispatch = async {
     Console.BackgroundColor <- ConsoleColor.Cyan
     Console.ForegroundColor <- ConsoleColor.Red
-    Console.ReadLine() |> fun i -> printfn "input %s" i; i
+    Console.ReadLine() |> fun i -> printfn "Processing....(please wait): '%s'" i; i
     |> function
-       | Regex @"Add (.*)" [x] -> Operation (Add, int x)
-       | Regex @"Sub (.*)" [x] -> Operation (Sub, int x)
-       | Regex @"Mul (.*)" [x] -> Operation (Mul, int x)
-       | "Factors On" -> ShowPrimes true
-       | "Factors Off" -> ShowPrimes false
-       | "Reset" -> Reset
+       | Regex @"[a,A]dd (.*)" [x] -> Operation (Add, int64 x)
+       | Regex @"[s,S]ub (.*)" [x] -> Operation (Sub, int64 x)
+       | Regex @"[m,M]ul (.*)" [x] -> Operation (Mul, int64 x)
+       | Regex "[f,F]actors (.*)" [b] -> 
+           b.ToLower()
+           |> function
+              | "on" -> ShowPrimes true
+              | "off" ->  ShowPrimes false
+              | _ -> failwith "badinput"
+       | "Reset" | "reset" -> Reset
        | _ -> failwith "badinput"
     |> dispatch
     return ()
     }
-
 
 [<EntryPoint>]
 let main argv =
@@ -40,10 +43,11 @@ let main argv =
         match model.Primes with
         | Some xs-> 
             Console.ForegroundColor <- ConsoleColor.DarkRed
-            printfn "Primes %O" xs
+            List.fold (fun acc s -> acc + (string s) + ",") "" xs
+            |> fun s -> s.TrimEnd(',')
+            |> printfn "Primes : [%s]"  
         | None -> ()        
         readConsole dispatch |> Async.Start
-
 
     let agent init update view = 
         MailboxProcessor.Start(fun inbox ->

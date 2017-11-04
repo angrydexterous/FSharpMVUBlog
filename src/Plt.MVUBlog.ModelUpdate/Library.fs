@@ -8,18 +8,18 @@ module Library =
               | Sub
               | Mul
 
-    type Msg = | Operation of Op*value:int
+    type Msg = | Operation of Op*value:int64
                | ShowPrimes of bool
                | Reset
 
-    type Model = { Value : int 
-                   Primes : int list option } with
+    type Model = { Value : int64 
+                   Primes : int64 list option } with
         static member Value_ = 
             (fun a -> a.Value), (fun b a -> { a with Value = b })
         static member Primes_ = 
             (fun a -> a.Primes), (fun b a -> { a with Primes = b })
 
-    let init = { Value = 0 
+    let init = { Value = 0L
                  Primes = None}
 
     let update msg model =
