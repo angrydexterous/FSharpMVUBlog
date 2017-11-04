@@ -30,6 +30,6 @@ module Library =
             | Sub -> Optic.set Model.Value_ (model.Value - x) model
             | Mul -> Optic.set Model.Value_ (model.Value * x) model
         | ShowPrimes b -> Optic.set Model.Primes_ (if b then Some List.empty else None) model
-        | Reset -> { model with Value = 0 } 
+        | Reset -> init 
         |> fun m -> (Option.map (fun _ -> primeFactors m.Value) m.Primes, m)
         ||> Optic.set Model.Primes_
