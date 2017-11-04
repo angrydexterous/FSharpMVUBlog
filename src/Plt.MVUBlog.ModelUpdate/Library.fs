@@ -33,3 +33,15 @@ module Library =
         | Reset -> init 
         |> fun m -> (Option.map (fun _ -> primeFactors m.Value) m.Primes, m)
         ||> Optic.set Model.Primes_
+
+    let runner init update view = 
+        MailboxProcessor.Start(fun inbox ->
+            view init <| inbox.Post
+            let rec waitForMsg model = async {
+                let! msg = inbox.Receive()
+                return! 
+                    waitForMsg <| 
+                        let m = update msg model
+                        view m <| inbox.Post
+                        m }
+            waitForMsg init)    

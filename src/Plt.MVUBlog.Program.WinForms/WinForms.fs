@@ -90,19 +90,8 @@ let main argv =
  
     use frm = new View()
     let view model dispatch = frm.view (model,dispatch)
-
-    let agent init update view = 
-        MailboxProcessor.Start(fun inbox ->
-            view init <| inbox.Post
-            let rec waitForMsg model = async {
-                let! msg = inbox.Receive()
-                return! 
-                    waitForMsg <| 
-                        let m = update msg model
-                        view m <| inbox.Post
-                        m }
-            waitForMsg init)
-    agent init update view |> ignore
+    
+    runner init update view |> ignore
     
     Application.Run(frm);
     0 // return an integer exit code

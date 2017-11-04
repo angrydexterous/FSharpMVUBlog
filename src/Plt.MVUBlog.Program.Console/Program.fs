@@ -49,18 +49,7 @@ let main argv =
         | None -> ()        
         readConsole dispatch |> Async.Start
 
-    let agent init update view = 
-        MailboxProcessor.Start(fun inbox ->
-            view init <| inbox.Post
-            let rec waitForMsg model = async {
-                let! msg = inbox.Receive()
-                return! 
-                    waitForMsg <| 
-                        let m = update msg model
-                        view m <| inbox.Post
-                        m }
-            waitForMsg init)
-    agent init update view |> ignore
+    runner init update view |> ignore
     
     holdOpen.WaitOne() |> ignore
     0 // return an integer exit code
