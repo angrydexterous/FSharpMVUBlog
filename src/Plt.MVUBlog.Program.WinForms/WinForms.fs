@@ -18,7 +18,6 @@ type View() as form =
         c.Click.AddHandler(hndl)
         oldEventHndl <- List.append oldEventHndl [c,hndl]
 
-    // let setClickHandler = 
     let tlp = new TableLayoutPanel()
     let valueLabel = new Label()
     let inputBox = new TextBox()
